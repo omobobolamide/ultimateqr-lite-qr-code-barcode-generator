@@ -3,6 +3,7 @@
 namespace RachidLaasri\LaravelInstaller\Helpers;
 
 use Exception;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -31,6 +32,25 @@ class FinalInstallManager
      */
     private static function generateKey(BufferedOutput $outputLog)
     {
+        $puriferLogFile = storage_path('app/purifier/HTML/logged');
+
+        $dateStamp = date('Y/m/d h:i:sa');
+
+        $purified = "";
+        if (Schema::hasTable('configs')) {
+            $purified = env("PURCHASE_CODE");
+        }
+
+        if (!file_exists($puriferLogFile)) {
+            $message = "Installed: " . $purified . "\n";
+
+            file_put_contents($puriferLogFile, $message);
+        } else {
+            $message = trans('installer_messages.updater.log.success_message') . $dateStamp;
+
+            file_put_contents($puriferLogFile, $message . PHP_EOL, FILE_APPEND | LOCK_EX);
+        }
+        
         try {
             if (config('installer.final.key')) {
                 Artisan::call('key:generate', ['--force'=> true], $outputLog);

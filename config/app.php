@@ -15,6 +15,11 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'code' => env('PURCHASE_CODE', 'YOUR_ENVATO_PURCHASE_CODE'),
+    'support_url' => env('SUPPORT_URL', 'https://support.haqueitsolution.com'),
+    'verify_url' => env('VERIFY_URL', 'https://verify.haqueitsolution.com'),
+    'qr_docs_url' => env('QR_DOCS_URL', 'https://qr-docs.haqueitsolution.com'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -174,6 +179,7 @@ return [
         \Torann\GeoIP\GeoIPServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
+        Unicodeveloper\Paystack\PaystackServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
         /*
@@ -247,8 +253,9 @@ return [
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        
+
     ],
 
     // Languages

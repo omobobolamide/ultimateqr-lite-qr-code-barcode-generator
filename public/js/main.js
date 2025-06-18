@@ -1,6 +1,5 @@
 // Burger menus
 document.addEventListener('DOMContentLoaded', function () {
-    "use strict";
     // open
     const burger = document.querySelectorAll('.navbar-burger');
     const menu = document.querySelectorAll('.navbar-menu');
@@ -40,27 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Preloader
-$(function () {
-    "use strict";
-    $('.preloader-wrapper').fadeOut();
-});
-
-// Datatable
-$('#table').DataTable({
-    "order": [
-        [0, "asc"]
-    ]
-});
-$('#table1').DataTable({
-    "order": [
-        [0, "asc"]
-    ]
-});
-
 // Choose langages
-$('#chooseLang').on("change", function () {
-    "use strict";
+$('#chooseLang').change(function () {
     // set the window's location property to the value of the option the user has selected
     window.location = `?change_language=` + $(this).val();
 });

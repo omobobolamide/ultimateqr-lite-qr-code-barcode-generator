@@ -121,7 +121,6 @@
     <script>
         // @formatter:off
         document.addEventListener("DOMContentLoaded", function() {
-            "use strict";
             var el;
             window.TomSelect && (new TomSelect(el = document.getElementById('select-groups'), {
                 copyClassesToDropdown: false,
@@ -129,7 +128,6 @@
                 controlInput: '<input>',
                 render: {
                     item: function(data, escape) {
-                        "use strict";
                         if (data.customProperties) {
                             return '<div><span class="dropdown-item-indicator">' + data
                                 .customProperties + '</span>' + escape(data.text) + '</div>';
@@ -137,7 +135,6 @@
                         return '<div>' + escape(data.text) + '</div>';
                     },
                     option: function(data, escape) {
-                        "use strict";
                         if (data.customProperties) {
                             return '<div><span class="dropdown-item-indicator">' + data
                                 .customProperties + '</span>' + escape(data.text) + '</div>';

@@ -19,7 +19,7 @@ $setting = Setting::where('status', 1)->first();
         <div class="w-full">
             <div class="max-w-sm mx-auto">
                 <div class="mb-6 text-center">
-                    <a class="inline-block mb-6" href="{{ url('/') }}">
+                    <a class="inline-block mb-6" href="{{ route('web.index') }}">
                         <img class="h-16" src="{{ asset($setting->site_logo) }}" alt="{{ config('app.name') }}">
                     </a>
                     <h3 class="mb-4 text-2xl md:text-3xl font-bold">{{ __('Confirm Password') }}</h3>

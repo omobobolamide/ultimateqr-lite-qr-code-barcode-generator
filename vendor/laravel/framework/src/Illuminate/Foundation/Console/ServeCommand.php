@@ -68,7 +68,7 @@ class ServeCommand extends Command
 
                 $this->comment('Environment modified. Restarting server...');
 
-                $process->stop(5);
+                // $process->stop(5);
 
                 $process = $this->startProcess($hasEnvironment);
             }

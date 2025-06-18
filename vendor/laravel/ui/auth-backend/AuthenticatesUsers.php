@@ -69,10 +69,18 @@ trait AuthenticatesUsers
      */
     protected function validateLogin(Request $request)
     {
-        $request->validate([
-            $this->username() => 'required|string',
-            'password' => 'required|string',
-        ]);
+        if (env('RECAPTCHA_ENABLE') == 'on') {
+            $request->validate([
+                $this->username() => 'required|string',
+                'password' => 'required|string',
+                'g-recaptcha-response' => ['recaptcha', 'required']
+            ]);
+        } else {
+            $request->validate([
+                $this->username() => 'required|string',
+                'password' => 'required|string',
+            ]);
+        }
     }
 
     /**

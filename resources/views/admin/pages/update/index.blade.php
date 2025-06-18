@@ -56,7 +56,7 @@
                                             <label class="form-label required">{{ __('Envato Purchase Code') }}</label>
                                             <input type="text" class="form-control" name="purchase_code"
                                                 placeholder="{{ __('Envato Purchase Code') }}..."
-                                                value="{{ $config[8]->config_value }}" required>
+                                                value="{{ $config[32]->config_value }}" required>
                                             <small class="form-hint">
                                                 <p><a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-"
                                                         target="_blank">{{ __('Where is my purchase code?') }}</a>
@@ -119,15 +119,15 @@
                     <div class="col-sm-12 col-lg-4 d-block">
                         <img src="{{ asset('images/piracy.png') }}" alt="Piracy">
                         {{-- Check regular license --}}
-                        @if ($config[4]->config_value == '0')
-                            <a href="https://codecanyon.net/cart/configure_before_adding/37300882?license=extended&ref=nativecode&size=source"
+                        @if ($config[13]->config_value == '0')
+                            <a href="https://codecanyon.net/cart/configure_before_adding/37300882?license=extended&ref=haqueitsolution&size=source"
                                 target="_blank" rel="noopener noreferrer">
                                 <img class="mt-3" src="{{ asset('images/admin/upgrade-to-extended-license.png') }}"
                                     alt="Upgrade to Extended License">
                             </a>
                         @endif
-                        @if ($config[4]->config_value == '1')
-                            <a href="https://support.nativecode.in" target="_blank" rel="noopener noreferrer">
+                        @if ($config[13]->config_value == '1')
+                            <a href="{!! config('app.support_url') !!}" target="_blank" rel="noopener noreferrer">
                                 <img class="mt-3" src="{{ asset('images/admin/get-support.png') }}" alt="Get Support">
                             </a>
                         @endif

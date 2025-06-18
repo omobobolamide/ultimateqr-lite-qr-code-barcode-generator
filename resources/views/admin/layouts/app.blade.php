@@ -1,7 +1,7 @@
 @php
-    use App\Models\Setting;
+use App\Models\Setting;
 
-    $setting = Setting::where('status', 1)->first();
+$setting = Setting::where('status', 1)->first();
 @endphp
 
 <!doctype html>
@@ -18,8 +18,8 @@
     <title>{{ config('app.name') }}</title>
 
     @if (isset($setting))
-        <!-- Favicon -->
-        <link rel="icon" href="{{ asset($setting->favicon) }}" sizes="96x96" type="image/png" />
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset($setting->favicon) }}" sizes="96x96" type="image/png" />
     @endif
 
     <!-- Fonts -->
@@ -28,7 +28,7 @@
 
     <!-- CSS files -->
     <link href="{{ asset('css/tabler.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/tabler-flags.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/tabler-flags.min.css') }}" rel="stylesheet" /> 
     <link href="{{ asset('css/tabler-payments.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/tabler-vendors.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/demo.min.css') }}" rel="stylesheet" />
@@ -76,6 +76,21 @@
     <script type="text/javascript" src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
+    <script>
+        // Preloader
+        $(document).ready(function() {
+            "use strict";
+            $('.preloader-wrapper').fadeOut();
+        });
+
+        // Datatable
+        $(document).ready(function() {
+            $('#table').DataTable();
+        });
+        $(document).ready(function() {
+            $('#table1').DataTable();
+        });
+    </script>
     {{-- Custom JS --}}
     @yield('custom-js')
 </body>

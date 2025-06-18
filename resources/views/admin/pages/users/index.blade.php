@@ -55,6 +55,7 @@
                                             <th>{{ __('Joined') }}</th>
                                             <th>{{ __('Full Name') }}</th>
                                             <th>{{ __('Email') }}</th>
+                                            <th>{{ __('Current Plan') }}</th>
                                             <th>{{ __('Status') }}</th>
                                             <th class="w-1">{{ __('Actions') }}</th>
                                         </tr>
@@ -73,6 +74,22 @@
                                                 <td class="">
                                                     {{ $user->email }}
                                                 </td>
+                                                <td class="text-capitalize">
+                                                    <?php $plan_data = json_decode($user->plan_details, true); ?>
+                                                    @if ($plan_data == null)
+                                                        {{ __('No Plan') }}
+                                                    @else
+                                                        {{ __($plan_data['plan_name']) }}
+                                                        <span>
+                                                            @if ($plan_data['plan_price'] == '0')
+                                                                ({{ __('Free') }})
+                                                            @else
+                                                                ({{ $config[1]->config_value }}
+                                                                {{ $plan_data['plan_price'] }})
+                                                            @endif
+                                                        </span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     @if ($user->status == 0)
                                                         <span class="badge bg-red text-white">{{ __('Inactive') }}</span>
@@ -88,6 +105,8 @@
                                                         <div class="dropdown-menu dropdown-menu-end" style="">
                                                             <a class="dropdown-item"
                                                                 href="{{ route('admin.edit.user', $user->id) }}">{{ __('Edit') }}</a>
+                                                            <a class="dropdown-item"
+                                                                href="{{ route('admin.change.user.plan', $user->id) }}">{{ __('Change Plan') }}</a>
                                                             @if ($user->status == 0)
                                                                 <a href="#" class="dropdown-item"
                                                                     onclick="getUser('{{ $user->id }}'); return false;">{{ __('Activate') }}</a>

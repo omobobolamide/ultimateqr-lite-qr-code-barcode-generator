@@ -11,10 +11,7 @@
 @php
 // Settings
 use App\Models\Setting;
-use App\Models\Config;
-
 $setting = Setting::where('status', 1)->first();
-$config = Config::where('status', 1)->get();
 @endphp
 
 {{-- Login --}}
@@ -24,7 +21,7 @@ $config = Config::where('status', 1)->get();
         <div class="w-full md:w-3/5 lg:w-full">
             <div class="max-w-sm mx-auto">
                 <div class="mb-6 text-center">
-                    <a class="inline-block mb-6" href="{{ url('/') }}">
+                    <a class="inline-block mb-6" href="{{ route('web.index') }}">
                         <img class="h-16" src="{{ asset($setting->site_logo) }}" alt="{{ config('app.name') }}">
                     </a>
                     <h3 class="mb-4 text-2xl md:text-3xl font-bold">{{ __('Sign in to your account') }}</h3>
@@ -42,7 +39,7 @@ $config = Config::where('status', 1)->get();
 
                         @error('email')
                         <span class="invalid-feedback mt-1" role="alert">
-                            <strong>{{ $message }}</strong>
+                            <strong>{{ $message }}</strong> 
                         </span>
                         @enderror
                     </div>
@@ -80,11 +77,19 @@ $config = Config::where('status', 1)->get();
                     @endif
 
                     <button type="submit"
-                        class="inline-block py-3 px-7 mb-3 lg:mr-3 w-full lg:full py-2 px-6 leading-loose bg-{{ $config[3]->config_value }}-500 hover:bg-{{ $config[3]->config_value }}-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200 text-center">{{
+                        class="inline-block py-3 px-7 mb-3 lg:mr-3 w-full lg:full py-2 px-6 leading-loose bg-{{ $config[11]->config_value }}-500 hover:bg-{{ $config[11]->config_value }}-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200 text-center">{{
                         __('Sign In') }}</button>
 
+                    {{-- Sign in With Google --}}
+                    @if (env('GOOGLE_ENABLE') == 'on')
+                    <a class="inline-block py-3 px-7 mb-3 lg:mr-3 w-full lg:full py-2 px-6 leading-loose bg-gray-900 hover:bg-gray-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200 text-center"
+                        href="{{ route('login.google') }}">
+                        <span>{{ __('Sign in with Google') }}</span>
+                    </a>
+                    @endif
+
                     {{-- Register --}}
-                    @if(Route::has('register') && $config[10]->config_value == 'yes')
+                    @if(Route::has('register'))
                     <p class="text-xs font-medium m-2 text-center">{{ __('Don’t have an account?') }}</p>
 
                     <p class="text-center">

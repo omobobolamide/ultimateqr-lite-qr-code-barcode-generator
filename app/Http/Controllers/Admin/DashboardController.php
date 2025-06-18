@@ -3,60 +3,53 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
-use App\Models\Plan;
 use App\Models\User;
 use App\Models\Config;
-use App\Models\QrCode;
-use App\Models\Barcode;
-use App\Models\Gateway;
 use App\Models\Setting;
 use App\Models\Currency;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
+use App\Classes\AvailableVersion;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     // Dashboard
     public function index()
     {
-        // Common Data
+        // Dashboard counts
         $settings = Setting::where('status', 1)->first();
         $config = Config::get();
+        $currency = Currency::where('iso_code', $config['1']->config_value)->first();
+        $this_month_income = Transaction::where('payment_status', 'Success')->whereMonth('created_at', Carbon::now()->month)->sum('transaction_amount');
+        $today_income = Transaction::where('payment_status', 'Success')->whereDate('created_at', Carbon::today())->sum('transaction_amount');
+        $overall_users = User::where('role_id', 2)->where('status', 1)->count();
+        $today_users = User::where('role_id', 2)->where('status', 1)->whereDate('created_at', Carbon::today())->count();
 
-        // Overall QR code, EPC QR code and barcode counts
-        $qrCodes = QrCode::where('user_id', Auth::user()->id)->where('type', '!=', 'epc')->where('status', 1)->count();
-        $epcCodes = QrCode::where('user_id', Auth::user()->id)->where('type', 'epc')->where('status', 1)->count();
-        $barCodes = Barcode::where('user_id', Auth::user()->id)->where('status', 1)->count();
-        $overallUsers = User::where('status', 1)->count();
-
-        // This month
-        $thisMonthQrCodes = QrCode::where('user_id', Auth::user()->id)->where('type', '!=', 'epc')->where('status', 1)->count();
-        $thisMonthEpcCodes = QrCode::where('user_id', Auth::user()->id)->where('type', 'epc')->where('status', 1)->count();
-        $thisMonthBarCodes = Barcode::where('user_id', Auth::user()->id)->where('status', 1)->count();
-
-        // Overview chart
-        $thisMonthQrCodes = [];
-        $thisMonthEpcCodes = [];
-        $thisMonthBarCodes = [];
-        for ($_month = 1; $_month <= 12; $_month++) {
-            $startDate = Carbon::create(date('Y'), $_month);
+        $monthIncome = [];
+        $monthUsers = [];
+        for ($month = 1; $month <= 12; $month++)
+        {
+            $startDate = Carbon::create(date('Y'), $month);
             $endDate = $startDate->copy()->endOfMonth();
+            $sales = Transaction::where('payment_status', 'Success')->where('created_at', '>=', $startDate)->where('created_at', '<=', $endDate)->sum('transaction_amount');
+            $users = User::where('role_id', 2)->where('created_at', '>=', $startDate)->where('created_at', '<=', $endDate)->count();
+            $monthIncome[$month] = $sales;
+            $monthUsers[$month] = $users;
+        }
+        $monthIncome = implode(',', $monthIncome);
+        $monthUsers = implode(',', $monthUsers);
 
-            $currentMonthQrCodes = QrCode::where('user_id', Auth::user()->id)->where('created_at', '>=', $startDate)->where('created_at', '<=', $endDate)->where('type', '!=', 'epc')->where('status', 1)->count();
-            $currentMonthEpcCodes = QrCode::where('user_id', Auth::user()->id)->where('created_at', '>=', $startDate)->where('created_at', '<=', $endDate)->where('type', 'epc')->where('status', 1)->count();
-            $currentMonthBarCodes = Barcode::where('user_id', Auth::user()->id)->where('created_at', '>=', $startDate)->where('created_at', '<=', $endDate)->where('status', 1)->count();
-            
-            $thisMonthQrCodes[$_month] = $currentMonthQrCodes;
-            $thisMonthEpcCodes[$_month] = $currentMonthEpcCodes;
-            $thisMonthBarCodes[$_month] = $currentMonthBarCodes;
+        // Default message
+        $available = new AvailableVersion;
+        $resp_data = $available->availableVersion();
+
+        if ($resp_data) {
+            if ($resp_data['status'] == true && $resp_data['update'] == true) {
+                // Store success message in session
+                session()->flash('message', trans('<a href="' . route("admin.check") . '" class="text-white">A new version is available! <span style="position: absolute; right: 7.5vh;">' . trans("Install") . '</span></a>'));
+            }
         }
 
-        $thisMonthQrCodes = implode(',', $thisMonthQrCodes);
-        $thisMonthEpcCodes = implode(',', $thisMonthEpcCodes);
-        $thisMonthBarCodes = implode(',', $thisMonthBarCodes);
-
-        return view('admin.index', compact('thisMonthQrCodes', 'thisMonthEpcCodes', 'thisMonthBarCodes', 'qrCodes', 'epcCodes', 'barCodes', 'overallUsers', 'settings'));
+        return view('admin.index', compact('this_month_income', 'today_income', 'overall_users', 'today_users', 'currency', 'settings', 'monthIncome', 'monthUsers'));
     }
 }

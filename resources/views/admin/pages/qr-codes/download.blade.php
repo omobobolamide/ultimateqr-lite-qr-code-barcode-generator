@@ -243,7 +243,7 @@
 </div>
 
 @php
-$shareContent = $config[7]->config_value;
+$shareContent = $config[30]->config_value;
 $shareContent = str_replace("{ appName }", env('APP_NAME'), $shareContent);
 $shareContent = str_replace("{ qr_code_link }", asset($qrcode_details->qr_code), $shareContent);
 @endphp
@@ -254,69 +254,66 @@ $shareContent = str_replace("{ qr_code_link }", asset($qrcode_details->qr_code),
     // Open share modal
     $(document).on("click", ".open-share-model", function () {
     "use strict";
-        $('#shareModal').modal('show');
-        var qrCodeId = $(this).data('id');
+    $('#shareModal').modal('show');
+    var qrCodeId = $(this).data('id');
 
-        // Set Facebook link
-        var facebookLink = 'https://www.facebook.com/sharer.php?u=' + `{{ asset($qrcode_details->qr_code) }}`+ '&t=' + `{{ $shareContent }}`;
-        facebookLink = facebookLink.replace(':qrCodeId', qrCodeId);
-        var facebookLinkPreview = document.getElementById("facebook");
-        facebookLinkPreview.setAttribute("href", facebookLink);
+    // Set Facebook link
+    var facebookLink = 'https://www.facebook.com/sharer.php?u=' + `{{ asset($qrcode_details->qr_code) }}`+ '&t=' + `{{ $shareContent }}`;
+    facebookLink = facebookLink.replace(':qrCodeId', qrCodeId);
+    var facebookLinkPreview = document.getElementById("facebook");
+    facebookLinkPreview.setAttribute("href", facebookLink);
 
-        // Set Twitter link
-        var twitterLink = 'https://twitter.com/intent/tweet?text='+ `{{ $shareContent }}`;
-        twitterLink = twitterLink.replace(':qrCodeId', qrCodeId);
-        var twitterLinkPreview = document.getElementById("twitter");
-        twitterLinkPreview.setAttribute("href", twitterLink);
+    // Set Twitter link
+    var twitterLink = 'https://twitter.com/intent/tweet?text='+ `{{ $shareContent }}`;
+    twitterLink = twitterLink.replace(':qrCodeId', qrCodeId);
+    var twitterLinkPreview = document.getElementById("twitter");
+    twitterLinkPreview.setAttribute("href", twitterLink);
 
-        // Set LinkedIn link
-        var linkedInLink = 'http://www.linkedin.com/shareArticle?mini=true&url=' + `{{ asset($qrcode_details->qr_code) }}` + '&title=This is your QR code link&summary=This is your QR code link&source='+`{{ env('APP_URL') }}`;
-        linkedInLink = linkedInLink.replace(':qrCodeId', qrCodeId);
-        var linkedInLinkPreview = document.getElementById("linkedin");
-        linkedInLinkPreview.setAttribute("href", linkedInLink);
+    // Set LinkedIn link
+    var linkedInLink = 'http://www.linkedin.com/shareArticle?mini=true&url=' + `{{ asset($qrcode_details->qr_code) }}` + '&title=This is your QR code link&summary=This is your QR code link&source='+`{{ env('APP_URL') }}`;
+    linkedInLink = linkedInLink.replace(':qrCodeId', qrCodeId);
+    var linkedInLinkPreview = document.getElementById("linkedin");
+    linkedInLinkPreview.setAttribute("href", linkedInLink);
 
-        // Set Whatsapp link
-        var whatsappLink = 'https://api.whatsapp.com/send?text='+ `{{ $shareContent }}`;
-        whatsappLink = whatsappLink.replace(':qrCodeId', qrCodeId);
-        var whatsappLinkPreview = document.getElementById("whatsapp");
-        whatsappLinkPreview.setAttribute("href", whatsappLink);
+    // Set Whatsapp link
+    var whatsappLink = 'https://api.whatsapp.com/send?text='+ `{{ $shareContent }}`;
+    whatsappLink = whatsappLink.replace(':qrCodeId', qrCodeId);
+    var whatsappLinkPreview = document.getElementById("whatsapp");
+    whatsappLinkPreview.setAttribute("href", whatsappLink);
 
-        // Set Telegram link
-        var telegramLink = 'https://telegram.me/share/url?text='+ `{{ $shareContent }}` + 'url=' + `{{ asset($qrcode_details->qr_code) }}`;
-        telegramLink = telegramLink.replace(':qrCodeId', qrCodeId);
-        var telegramLinkPreview = document.getElementById("telegram");
-        telegramLinkPreview.setAttribute("href", telegramLink);
+    // Set Telegram link
+    var telegramLink = 'https://telegram.me/share/url?text='+ `{{ $shareContent }}` + 'url=' + `{{ asset($qrcode_details->qr_code) }}`;
+    telegramLink = telegramLink.replace(':qrCodeId', qrCodeId);
+    var telegramLinkPreview = document.getElementById("telegram");
+    telegramLinkPreview.setAttribute("href", telegramLink);
 
-        // Set Email link
-        var emailLink = 'mailto:?subject=My QR Code&amp;body=This is your QR code link :'+ `{{ asset($qrcode_details->qr_code) }}`;
-        emailLink = emailLink.replace(':qrCodeId', qrCodeId);
-        var emailLinkPreview = document.getElementById("email");
-        emailLinkPreview.setAttribute("href", emailLink);
+    // Set Email link
+    var emailLink = 'mailto:?subject=My QR Code&amp;body=This is your QR code link :'+ `{{ asset($qrcode_details->qr_code) }}`;
+    emailLink = emailLink.replace(':qrCodeId', qrCodeId);
+    var emailLinkPreview = document.getElementById("email");
+    emailLinkPreview.setAttribute("href", emailLink);
 
-        // Copy link
-        var clipboard = new ClipboardJS('.copyLink');
-        
-        clipboard.on('success', function (e) {
-        "use strict";
+    // Copy link
+    var clipboard = new ClipboardJS('.copyLink');
+    clipboard.on('success', function (e) {
+      swal({
+         title: "Copied!",
+         text: "QR Code path was copied.",
+         icon: "success",
+         buttons: false,
+         timer: 2000
+         });
+      });
+
+    clipboard.on('error', function (e) {
         swal({
-            title: "Copied!",
-            text: "QR Code path was copied.",
-            icon: "success",
-            buttons: false,
-            timer: 2000
-            });
+         title: "Oops!",
+         text: "Something wrong.",
+         icon: "error",
+          buttons: false,
+         timer: 2000
         });
-
-        clipboard.on('error', function (e) {
-        "use strict";
-        swal({
-            title: "Oops!",
-            text: "Something wrong.",
-            icon: "error",
-            buttons: false,
-            timer: 2000
-            });
-        });
+    });
 });
 </script>
 @endsection

@@ -43,17 +43,17 @@ class LicenseController extends Controller
         $server_name = serverReq::server("SERVER_NAME");
 
         // License Validator
-        /*$client = new \GuzzleHttp\Client();
-        $res = $client->post('https://verify.nativecode.in/ultimateqr-lite/validate', [
+        $client = new \GuzzleHttp\Client();
+        $res = $client->post(config('app.verify_url').'/ultimateqr/validate', [
             'form_params' => [
                 'purchase_code' => $request->purchase_code,
                 'server_name' => $server_name
             ]
-        ]);*/
+        ]);
 
         // Return response
-        //$resp_data = json_decode($res->getBody(), true);
-        $resp_data = ['status' => true, 'message' => 'success'];
+        $resp_data = json_decode($res->getBody(), true);
+
         if ($resp_data) {
             // Check status is "TRUE"
             if ($resp_data['status'] == true) {

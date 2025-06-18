@@ -62,7 +62,7 @@ class AccountController extends Controller
         if (isset($request->profile_picture)) {
             // Image validatation
             $validator = $request->validate([
-                'profile_picture' => 'required|mimes:jpeg,png,jpg,gif|max:' . env("SIZE_LIMIT") . '',
+                'profile_picture' => 'required|mimes:jpeg,png,jpg,gif,svg|max:' . env("SIZE_LIMIT") . '',
             ]);
 
             // get profile image
@@ -71,9 +71,9 @@ class AccountController extends Controller
             $UploadExtension = pathinfo($profile_picture, PATHINFO_EXTENSION);
             
             // Upload image
-            if ($UploadExtension == "jpeg" || $UploadExtension == "png" || $UploadExtension == "jpg" || $UploadExtension == "gif") {
+            if ($UploadExtension == "jpeg" || $UploadExtension == "png" || $UploadExtension == "jpg" || $UploadExtension == "gif" || $UploadExtension == "svg") {
                 // Upload image
-                $profile_picture = 'images/admin/profile_images/' . uniqid() . '.' . $UploadExtension;
+                $profile_picture = 'images/admin/profile_images/' . $UploadProfile . '_' . uniqid() . '.' . $UploadExtension;
                 $request->profile_picture->move(public_path('images/admin/profile_images'), $profile_picture);
 
                 // Update user profile image

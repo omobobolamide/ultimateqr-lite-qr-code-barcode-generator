@@ -15,7 +15,7 @@
             <div class="flex flex-wrap justify-center">
                 <div class="w-full md:w-auto py-1 md:py-0 md:mr-6"><a
                         class="hidden lg:inline-block py-2 px-6 bg-green-500 hover:bg-green-600 text-sm text-white font-bold rounded-l-xl rounded-t-xl transition duration-200"
-                        href="{{ url('/') }}">{{ __('Go back to Homepage') }}</a></div>
+                        href="{{ route('web.index') }}">{{ __('Go back to Homepage') }}</a></div>
                 <div class="w-full md:w-auto py-1 md:py-0"><a
                         class="hidden lg:inline-block py-2 px-6 bg-gray-900 hover:bg-gray-600 text-sm text-white font-bold rounded-l-xl rounded-t-xl transition duration-200"
                         href="{{ url()->previous() }}">{{ __('Try Again') }}</a></div>

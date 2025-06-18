@@ -189,7 +189,6 @@
 
         // Delete barcode
         function deleteBarcode(mid) {
-            "use strict";
             swal({
                     title: "{{ __('Are you sure?') }}",
                     text: "{{ __('Do you want to remove this barcode?') }}",

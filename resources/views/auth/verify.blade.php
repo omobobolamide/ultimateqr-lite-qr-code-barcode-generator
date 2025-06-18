@@ -20,7 +20,7 @@ $setting = Setting::where('status', 1)->first();
         <div class="w-full">
             <div class="max-w-sm mx-auto">
                 <div class="mb-6 text-center">
-                    <a class="inline-block mb-6" href="{{ url('/') }}">
+                    <a class="inline-block mb-6" href="{{ route('web.index') }}">
                         <img class="h-16" src="{{ asset($setting->site_logo) }}" alt="{{ config('app.name') }}">
                     </a>
                     <h3 class="mb-4 text-2xl md:text-3xl font-bold">{{ __('Verify Your Email Address') }}</h3>
@@ -28,10 +28,10 @@ $setting = Setting::where('status', 1)->first();
 
                 {{-- Resent --}}
                 @if (session('resent'))
-                <div class="alert flex flex-row items-center bg-{{ $config[3]->config_value }}-200 p-5 rounded border-b-2 border-{{ $config[3]->config_value }}-300 mb-3">
+                <div class="alert flex flex-row items-center bg-{{ $config[11]->config_value }}-200 p-5 rounded border-b-2 border-{{ $config[11]->config_value }}-300 mb-3">
                     <div
-                        class="alert-icon flex items-center bg-{{ $config[3]->config_value }}-100 border-2 border-{{ $config[3]->config_value }}-500 justify-center h-10 w-10 flex-shrink-0 rounded-full">
-                        <span class="text-{{ $config[3]->config_value }}-500">
+                        class="alert-icon flex items-center bg-{{ $config[11]->config_value }}-100 border-2 border-{{ $config[11]->config_value }}-500 justify-center h-10 w-10 flex-shrink-0 rounded-full">
+                        <span class="text-{{ $config[11]->config_value }}-500">
                             <svg fill="currentColor" viewBox="0 0 20 20" class="h-6 w-6">
                                 <path fill-rule="evenodd"
                                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -40,7 +40,7 @@ $setting = Setting::where('status', 1)->first();
                         </span>
                     </div>
                     <div class="alert-content ml-4">
-                        <div class="alert-description text-sm text-{{ $config[3]->config_value }}-600">
+                        <div class="alert-description text-sm text-{{ $config[11]->config_value }}-600">
                             {{ __('A fresh verification link has been sent to your email address.') }}
                         </div>
                     </div>
@@ -71,7 +71,7 @@ $setting = Setting::where('status', 1)->first();
                     @csrf
 
                     <button type="submit"
-                        class="inline-block py-3 px-7 mb-6 lg:mb-0 lg:mr-3 w-full lg:full py-2 px-6 leading-loose bg-{{ $config[3]->config_value }}-500 hover:bg-{{ $config[3]->config_value }}-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200 text-center">{{
+                        class="inline-block py-3 px-7 mb-6 lg:mb-0 lg:mr-3 w-full lg:full py-2 px-6 leading-loose bg-{{ $config[11]->config_value }}-500 hover:bg-{{ $config[11]->config_value }}-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200 text-center">{{
                         __('click here to request
                         another') }}</button>
                 </form>

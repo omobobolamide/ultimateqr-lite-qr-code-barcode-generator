@@ -403,7 +403,6 @@ flynxapp
 forensiq
 ForusP
 FoundSeoTool
-fragFINN\.de
 free thumbnails
 Freeuploader
 FreshRSS
@@ -462,7 +461,6 @@ Google-Apps-Script
 Google-Calendar-Importer
 Google-HotelAdsVerifier
 Google-HTTP-Java-Client
-Google-InspectionTool
 Google-Podcast
 Google-Publisher-Plugin
 Google-Read-Aloud
@@ -599,7 +597,6 @@ internet_archive
 intraVnews
 IODC
 IOI
-Inboxb0t
 iplabel
 ips-agent
 IPS\/[0-9]
@@ -1107,11 +1104,9 @@ SpaceBison
 SpamExperts
 Spammen
 Spanner
-Spawning-AI
 spaziodati
 SPDYCheck
 Specificfeeds
-SpeedKit
 speedy
 SPEng
 Spinn3r

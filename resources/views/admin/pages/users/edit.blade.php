@@ -58,7 +58,7 @@
                                     <div class="row">
                                         {{-- User id --}}
                                         <input type="hidden" class="form-control" name="user_id"
-                                            placeholder="{{ __('User ID') }}" value="{{ $user_details->id }}"
+                                            placeholder="{{ __('User ID') }}..." value="{{ $user_details->id }}"
                                             readonly>
 
                                         {{-- User fullname --}}
@@ -66,7 +66,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('Full Name') }}</label>
                                                 <input type="text" class="form-control" name="full_name"
-                                                    placeholder="{{ __('Full Name') }}"
+                                                    placeholder="{{ __('Full Name') }}..."
                                                     value="{{ $user_details->name }}" required>
                                             </div>
                                         </div>
@@ -75,7 +75,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('Email') }} </label>
                                                 <input type="text" class="form-control" name="email"
-                                                    placeholder="{{ __('Email') }}"
+                                                    placeholder="{{ __('Email') }}..."
                                                     value="{{ $user_details->email }}" required>
                                             </div>
                                         </div>
@@ -89,7 +89,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label required">{{ __('New Password') }} </label>
                                                 <input type="password" class="form-control" name="password"
-                                                    placeholder="{{ __('New Password') }}">
+                                                    placeholder="{{ __('New Password') }}...">
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-xl-6"></div>

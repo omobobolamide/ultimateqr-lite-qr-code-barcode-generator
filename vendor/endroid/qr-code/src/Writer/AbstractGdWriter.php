@@ -11,7 +11,6 @@ use Endroid\QrCode\ImageData\LogoImageData;
 use Endroid\QrCode\Label\LabelAlignment;
 use Endroid\QrCode\Label\LabelInterface;
 use Endroid\QrCode\Logo\LogoInterface;
-use Endroid\QrCode\Matrix\MatrixInterface;
 use Endroid\QrCode\QrCodeInterface;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\Result\GdResult;
@@ -20,20 +19,14 @@ use Zxing\QrReader;
 
 abstract class AbstractGdWriter implements WriterInterface, ValidatingWriterInterface
 {
-    protected function getMatrix(QrCodeInterface $qrCode): MatrixInterface
-    {
-        $matrixFactory = new MatrixFactory();
-
-        return $matrixFactory->create($qrCode);
-    }
-
     public function write(QrCodeInterface $qrCode, LogoInterface $logo = null, LabelInterface $label = null, array $options = []): ResultInterface
     {
         if (!extension_loaded('gd')) {
             throw new \Exception('Unable to generate image: please check if the GD extension is enabled and configured correctly');
         }
 
-        $matrix = $this->getMatrix($qrCode);
+        $matrixFactory = new MatrixFactory();
+        $matrix = $matrixFactory->create($qrCode);
 
         $baseBlockSize = RoundBlockSizeMode::None === $qrCode->getRoundBlockSizeMode() ? 10 : intval($matrix->getBlockSize());
         $baseImage = imagecreatetruecolor($matrix->getBlockCount() * $baseBlockSize, $matrix->getBlockCount() * $baseBlockSize);

@@ -68,7 +68,5 @@ class Exclusions extends AbstractProvider
         '; ID bot',
         '; POWER BOT',
         'OCTOPUS-CORE',
-        'htc_botdugls',
-        'super\/\d+\/Android\/\d+',
     );
 }

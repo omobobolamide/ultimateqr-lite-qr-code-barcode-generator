@@ -7,6 +7,7 @@ use App\Models\Config;
 use App\Models\Setting;
 use App\Models\Currency;
 use Illuminate\Http\Request;
+use App\Classes\AccessableQr;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
@@ -39,7 +40,6 @@ class SettingController extends Controller
         $currencies = Currency::get();
         $settings = Setting::first();
         $config = Config::get();
-        //dd($config);
 
         // Get email configuration details
         $email_configuration = [
@@ -51,6 +51,14 @@ class SettingController extends Controller
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'address' => env('MAIL_FROM_ADDRESS'),
             'name' => env('MAIL_FROM_NAME', $settings->site_name),
+        ];
+
+        // Get google configuration details
+        $google_configuration = [
+            'GOOGLE_ENABLE' => env('GOOGLE_ENABLE', ''),
+            'GOOGLE_CLIENT_ID' => env('GOOGLE_CLIENT_ID', ''),
+            'GOOGLE_CLIENT_SECRET' => env('GOOGLE_CLIENT_SECRET', ''),
+            'GOOGLE_REDIRECT' => env('GOOGLE_REDIRECT', '')
         ];
 
         // Get image limit
@@ -66,6 +74,7 @@ class SettingController extends Controller
         ];
 
         $settings['email_configuration'] = $email_configuration;
+        $settings['google_configuration'] = $google_configuration;
         $settings['recaptcha_configuration'] = $recaptcha_configuration;
         $settings['image_limit'] = $image_limit;
 
@@ -75,6 +84,15 @@ class SettingController extends Controller
     // Update General Setting
     public function changeGeneralSettings(Request $request)
     {
+        
+        Setting::where('id', '1')->update([
+            'tawk_chat_bot_key' => $request->tawk_chat_bot_key
+        ]);
+
+        Config::where('config_key', 'show_website')->update([
+            'config_value' => $request->show_website,
+        ]);
+
         Config::where('config_key', 'timezone')->update([
             'config_value' => $request->timezone,
         ]);
@@ -83,17 +101,18 @@ class SettingController extends Controller
             'config_value' => $request->currency,
         ]);
 
-        Config::where('config_key', 'share_content')->update([
-            'config_value' => $request->share_content,
+        Config::where('config_key', 'term')->update([
+            'config_value' => $request->term,
         ]);
 
-        Config::where('config_key', 'app_users')->update([
-            'config_value' => $request->app_users,
+        Config::where('config_key', 'share_content')->update([
+            'config_value' => $request->share_content,
         ]);
 
         $this->changeEnv([
             'TIMEZONE' => $request->timezone,
             'APP_TYPE' => $request->app_type,
+            'COOKIE_CONSENT_ENABLED' => $request->cookie,
             'SIZE_LIMIT' => $request->image_limit
         ]);
 
@@ -116,60 +135,56 @@ class SettingController extends Controller
             'config_value' => $site_name,
         ]);
 
-        // Update details
-        Setting::where('id', '1')->update([
-            'site_name' => $request->site_name, 'seo_meta_description' => $request->seo_meta_desc, 'seo_keywords' => $request->meta_keywords
+        Config::where('config_key', 'app_theme')->update([
+            'config_value' => $request->app_theme,
         ]);
 
         // Check website logo
         if (isset($request->site_logo)) {
-            $validator = Validator::make($request->all(), [
-                'site_logo' => 'mimes:jpeg,png,jpg,gif|max:' . env("SIZE_LIMIT") . '',
+            $validator = $request->validate([
+                'site_logo' => 'mimes:jpeg,png,jpg,gif,svg|max:' . env("SIZE_LIMIT") . '',
             ]);
 
-            if ($validator->fails()) {
-                return back()->with('errors', $validator->messages()->all()[0])->withInput();
-            }
-
-            // get site logo
-            $site_logo = $request->site_logo->getClientOriginalName();
-            $UploadExtension = pathinfo($site_logo, PATHINFO_EXTENSION);
-
-            // Upload image
-            if ($UploadExtension == "jpeg" || $UploadExtension == "png" || $UploadExtension == "jpg" || $UploadExtension == "gif") {
-                $site_logo = '/images/' . uniqid() . '.' . $UploadExtension;
-                $request->site_logo->move(public_path('images'), $site_logo);
-            }
+            $site_logo = '/images/web/elements/' . uniqid() . '.' . $request->site_logo->extension();
+            $request->site_logo->move(public_path('images/web/elements'), $site_logo);
 
             // Update details
             Setting::where('id', '1')->update([
-                'site_logo' => $site_logo
+                'google_analytics_id' => $request->google_analytics_id, 'google_tag' => $request->google_tag,
+                'site_name' => $request->site_name, 'site_logo' => $site_logo,
+                'tawk_chat_bot_key' => $request->tawk_chat_bot_key,
             ]);
         }
 
         // Check favicon
         if (isset($request->favi_icon)) {
-            $validator = Validator::make($request->all(), [
-                'favi_icon' => 'mimes:jpeg,png,jpg,gif|max:' . env("SIZE_LIMIT") . '',
+            $validator = $request->validate([
+                'favi_icon' => 'mimes:jpeg,png,jpg,gif,svg|max:' . env("SIZE_LIMIT") . '',
             ]);
 
-            if ($validator->fails()) {
-                return back()->with('errors', $validator->messages()->all()[0])->withInput();
-            }
-
-            // get favicon
-            $favi_icon = $request->favi_icon->getClientOriginalName();
-            $UploadExtension = pathinfo($favi_icon, PATHINFO_EXTENSION);
-
-            // Upload image
-            if ($UploadExtension == "jpeg" || $UploadExtension == "png" || $UploadExtension == "jpg" || $UploadExtension == "gif") {
-                $favi_icon = '/images/' . uniqid() . '.' . $UploadExtension;
-                $request->favi_icon->move(public_path('images'), $favi_icon);
-            }
+            $favi_icon = '/images/web/elements/' . uniqid() . '.' . $request->favi_icon->extension();
+            $request->favi_icon->move(public_path('images/web/elements'), $favi_icon);
 
             // Update details
             Setting::where('id', '1')->update([
-                'favicon' => $favi_icon
+                'google_analytics_id' => $request->google_analytics_id, 'google_tag' => $request->google_tag,
+                'site_name' => $request->site_name, 'favicon' => $favi_icon,
+                'tawk_chat_bot_key' => $request->tawk_chat_bot_key,
+            ]);
+        }
+
+        // Check primary image for website banner
+        if (isset($request->primary_image)) {
+            $validator = $request->validate([
+                'primary_image' => 'mimes:jpeg,png,jpg,gif,svg|max:' . env("SIZE_LIMIT") . '',
+            ]);
+
+            $primary_image = '/images/web/elements/' . uniqid() . '.' . $request->primary_image->extension();
+            $request->primary_image->move(public_path('/images/web/elements'), $primary_image);
+
+            // Update image
+            Config::where('config_key', 'primary_image')->update([
+                'config_value' => $primary_image,
             ]);
         }
 
@@ -177,11 +192,100 @@ class SettingController extends Controller
         return redirect()->back()->with('success', trans('Website Settings Updated Successfully!'));
     }
 
+    // Update Website QR Generator Setting
+    public function changeWebsiteQrGeneratorSettings(Request $request)
+    {
+        $accessableQr = new AccessableQr;
+        $accessableQr->Qr($request);
+
+        // Update settings
+        Setting::where('id', '1')->update([
+            'show_qr' => $request->show, 'qr_count' => $request->qr_count, 'accessable_qr' => json_encode($accessableQr->access_types)
+        ]);
+
+        // Page redirect
+        return redirect()->route('admin.settings')->with('success', trans('QR Generator Settings Updated Successfully!'));
+    }
+
+    // Update Payments Setting
+    public function changePaymentsSettings(Request $request)
+    {
+        // Paypal
+        Config::where('config_key', 'paypal_mode')->update([
+            'config_value' => $request->paypal_mode,
+        ]);
+
+        Config::where('config_key', 'paypal_client_id')->update([
+            'config_value' => $request->paypal_client_key,
+        ]);
+
+        Config::where('config_key', 'paypal_secret')->update([
+            'config_value' => $request->paypal_secret,
+        ]);
+
+        // Razorpay
+        Config::where('config_key', 'razorpay_key')->update([
+            'config_value' => $request->razorpay_client_key,
+        ]);
+
+        Config::where('config_key', 'razorpay_secret')->update([
+            'config_value' => $request->razorpay_secret,
+        ]);
+
+        // PhonePe
+        Config::where('config_key', 'merchantId')->update([
+            'config_value' => $request->merchantId,
+        ]);
+
+        Config::where('config_key', 'saltKey')->update([
+            'config_value' => $request->saltKey,
+        ]);
+
+        // Stripe
+        Config::where('config_key', 'stripe_publishable_key')->update([
+            'config_value' => $request->stripe_publishable_key,
+        ]);
+
+        Config::where('config_key', 'stripe_secret')->update([
+            'config_value' => $request->stripe_secret,
+        ]);
+
+        // Paystack
+        Config::where('config_key', 'paystack_public_key')->update([
+            'config_value' => $request->paystack_public_key,
+        ]);
+
+        Config::where('config_key', 'paystack_secret_key')->update([
+            'config_value' => $request->paystack_secret,
+        ]);
+
+        Config::where('config_key', 'merchant_email')->update([
+            'config_value' => $request->merchant_email,
+        ]);
+
+        // Mollie
+        Config::where('config_key', 'mollie_key')->update([
+            'config_value' => $request->mollie_key,
+        ]);
+
+        // Bank Transfer
+        Config::where('config_key', 'bank_transfer')->update([
+            'config_value' => $request->bank_transfer,
+        ]);
+
+        // Page redirect
+        return redirect()->back()->with('success', trans('Payment Settings Updated Successfully!'));
+    }
+
     // Update Google Setting
     public function changeGoogleSettings(Request $request)
     {
+        Setting::where('id', '1')->update([
+            'google_analytics_id' => $request->google_analytics_id, 'google_tag' => $request->google_tag
+        ]);
+
         // Page redirect
-        return redirect()->back()->with('failed', trans('You can change the respective values directly from .env file.'));
+        return redirect()->back()->with('success', trans('Google Settings Updated Successfully!'));
     }
 
     // Update Email Setting
@@ -189,6 +293,77 @@ class SettingController extends Controller
     {
         // Page redirect
         return redirect()->back()->with('failed', trans('You can change the respective values directly from .env file.'));
+    }
+
+    // Tax settings
+    public function taxSetting()
+    {
+        // Queries
+        $config = Config::get();
+        $settings = Setting::first();
+
+        // Page view
+        return view('admin.pages.tax.index', compact('config', 'settings'));
+    }
+
+    // Update tax setting
+    public function updateTaxSetting(Request $request)
+    {
+        // Update
+        Config::where('config_key', 'invoice_prefix')->update([
+            'config_value' => $request->invoice_prefix,
+        ]);
+
+        Config::where('config_key', 'invoice_name')->update([
+            'config_value' => $request->invoice_name,
+        ]);
+
+        Config::where('config_key', 'invoice_email')->update([
+            'config_value' => $request->invoice_email,
+        ]);
+
+        Config::where('config_key', 'invoice_phone')->update([
+            'config_value' => $request->invoice_phone,
+        ]);
+
+        Config::where('config_key', 'invoice_address')->update([
+            'config_value' => $request->invoice_address,
+        ]);
+
+        Config::where('config_key', 'invoice_city')->update([
+            'config_value' => $request->invoice_city,
+        ]);
+
+        Config::where('config_key', 'invoice_state')->update([
+            'config_value' => $request->invoice_state,
+        ]);
+
+        Config::where('config_key', 'invoice_zipcode')->update([
+            'config_value' => $request->invoice_zipcode,
+        ]);
+
+        Config::where('config_key', 'invoice_country')->update([
+            'config_value' => $request->invoice_country,
+        ]);
+
+        Config::where('config_key', 'tax_name')->update([
+            'config_value' => $request->tax_name,
+        ]);
+
+        Config::where('config_key', 'tax_number')->update([
+            'config_value' => $request->tax_number,
+        ]);
+
+        Config::where('config_key', 'tax_value')->update([
+            'config_value' => $request->tax_value,
+        ]);
+
+        Config::where('config_key', 'invoice_footer')->update([
+            'config_value' => $request->invoice_footer,
+        ]);
+
+        // Page redirect
+        return redirect()->back()->with('success', trans('Invoice Setting Updated Successfully!'));
     }
 
     // Update email setting

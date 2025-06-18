@@ -31,6 +31,6 @@ class ResetPasswordController extends Controller
     // Redirect to dashboard
     protected function redirectTo()
     {
-        return '/admin/dashboard';
+        return '/user/dashboard';
     }
 }

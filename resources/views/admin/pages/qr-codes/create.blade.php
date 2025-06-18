@@ -72,7 +72,7 @@
                                                 <div class="sticky-top card p-3">
                                                     {{-- Regenerate QR Code --}}
                                                     <div id="regenerate_qr" class="visible-print p-3 text-center code-style">
-                                                        <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size('400')->merge('images/google_logo_new.png', 0.2, true)->generate('https://google.co.in'),) !!} ">
+                                                        <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size('400')->merge('images/web/social/google_logo_new.png', 0.2, true)->generate('https://google.co.in'),) !!} ">
                                                     </div>
 
                                                     {{-- Loader --}}

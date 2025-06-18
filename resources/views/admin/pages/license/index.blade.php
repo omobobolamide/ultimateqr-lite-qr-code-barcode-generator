@@ -76,7 +76,7 @@
                                                     }}</label>
                                                 <input type="text" class="form-control" name="purchase_code"
                                                     placeholder="{{ __('Envato Purchase Code') }}..."
-                                                    value="{{ $config[8]->config_value }}" required>
+                                                    value="{{ $config[32]->config_value }}" required>
                                                 <small class="form-hint">
                                                     <p><a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code-"
                                                             target="_blank">{{ __("Where is my purchase code?") }}</a>
