@@ -25,7 +25,5 @@ class CheckType
         }
 
         return redirect()->route('login');
-        
     }
-  
 }

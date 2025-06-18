@@ -42,7 +42,7 @@
                     <label class="form-label">
                         {{ trans('installer_messages.environment.wizard.form.app_name_label') }}</label>
                     <input type="text" class="form-control" name="app_name" id="app_name"
-                        value="{{ __('UltimateQR Lite') }}" onkeypress="return blockSpecialChar(event)"
+                        value="{{ __('UltimateQR') }}" onkeypress="return blockSpecialChar(event)"
                         placeholder="{{ trans('installer_messages.environment.wizard.form.app_name_placeholder') }}"
                         autocomplete="off">
                 </div>

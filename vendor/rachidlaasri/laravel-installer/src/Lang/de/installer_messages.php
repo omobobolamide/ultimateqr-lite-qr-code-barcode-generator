@@ -7,7 +7,7 @@ return [
      * Shared translations.
      *
      */
-    'title' => 'Laravel Installer',
+    'title' => 'NativeCode Installer',
     'next' => 'Nächster Schritt',
     'finish' => 'Installieren',
 

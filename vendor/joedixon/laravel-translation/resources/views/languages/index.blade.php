@@ -1,3 +1,6 @@
+{{-- Check Admin --}}
+@if (Auth::user()->role_id == 1)
+
 @extends('translation::layout')
 
 @section('body')
@@ -54,3 +57,9 @@
     @endif
 
 @endsection
+
+@else
+<script>
+    window.location = "user/dashboard";
+</script>
+@endif

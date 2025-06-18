@@ -49,7 +49,11 @@ trait SendsPasswordResetEmails
      */
     protected function validateEmail(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        if (env('RECAPTCHA_ENABLE') == 'on') {
+            $request->validate(['email' => 'required|email', 'g-recaptcha-response' => ['recaptcha', 'required']]);
+        } else {
+            $request->validate(['email' => 'required|email']);
+        }
     }
 
     /**

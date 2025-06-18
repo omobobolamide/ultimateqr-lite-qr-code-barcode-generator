@@ -5,14 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use App\Models\Config;
 use App\Models\Setting;
-use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Artesaos\SEOTools\Facades\JsonLd;
-use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Providers\RouteServiceProvider;
-use Artesaos\SEOTools\Facades\SEOTools;
-use Artesaos\SEOTools\Facades\OpenGraph;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -55,7 +50,7 @@ class LoginController extends Controller
             return redirect('/admin/dashboard');
         }
 
-        return redirect('/admin/dashboard');
+        return redirect('/user/dashboard');
     }
 
     // Show login form
@@ -74,24 +69,46 @@ class LoginController extends Controller
 
         $settings['recaptcha_configuration'] = $recaptcha_configuration;
 
-        // Seo Tools
-        SEOTools::setTitle("Login - ".$settings->site_name);
-        SEOTools::setDescription($settings->seo_meta_description);
-
-        SEOMeta::setTitle("Login - ".$settings->site_name);
-        SEOMeta::setDescription($settings->seo_meta_description);
-        SEOMeta::addMeta('article:section', ucfirst("Login - ".$settings->site_name) . ' - ' . $settings->seo_meta_description, 'property');
-        SEOMeta::addKeyword([$settings->meta_keywords]);
-
-        OpenGraph::setTitle("Login - ".$settings->site_name);
-        OpenGraph::setDescription($settings->seo_meta_description);
-        OpenGraph::setUrl(URL::full());
-        OpenGraph::addImage([asset($settings->site_logo), 'size' => 300]);
-
-        JsonLd::setTitle("Login - ".$settings->site_name);
-        JsonLd::setDescription($settings->seo_meta_description);
-        JsonLd::addImage(asset($settings->site_logo));
-
         return view('auth.login', compact('config', 'settings'));
+    }
+
+    // Login redirect
+    public function redirectToProvider()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    // Google login callback
+    public function handleProviderCallback()
+    {
+        try {
+            $user = Socialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return redirect('/login');
+        }
+
+        // check if they're an existing user
+        $existingUser = User::where('email', $user->email)->first();
+        if($existingUser){
+            if($existingUser->status == 1){
+                // log them in
+                auth()->login($existingUser, true);
+            }else{
+                  return redirect('/login');
+            }
+
+        } else {
+        // create a new user
+            $newUser = new User;
+            $newUser->name = $user->name;
+            $newUser->email = $user->email;
+            $newUser->profile_image = $user->avatar;
+            $newUser->password = bcrypt($newUser->user_id);
+            $newUser->auth_type = "Google";
+            $newUser->role_id = 2;
+            $newUser->save();
+            auth()->login($newUser, true);
+        }
+        return redirect()->to('/user/dashboard');
     }
 }

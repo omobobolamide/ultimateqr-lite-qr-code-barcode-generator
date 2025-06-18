@@ -67,7 +67,7 @@ return [
     'environment' => [
         'form' => [
             'rules' => [
-		//'purchase_code'         => 'required|string',
+		'purchase_code'         => 'required|string',
                 'app_name'              => 'required|string|max:50',
                 'environment'           => 'required|string|max:50',
                 'environment_custom'    => 'required_if:environment,other|max:50',

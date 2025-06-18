@@ -10,13 +10,9 @@
 @php
 // Settings
 use App\Models\Setting;
-use App\Models\Config;
-
 $setting = Setting::where('status', 1)->first();
-$config = Config::where('status', 1)->get();
 @endphp
 
-@if(Route::has('register') && $config[10]->config_value == 'yes')
 {{-- Register --}}
 <section class="relative pt-16 pb-0 md:py-22 bg-white"
     style="background-image: url('{{ asset('images/web/elements/pattern-white.svg') }}'); background-position: center;">
@@ -24,7 +20,7 @@ $config = Config::where('status', 1)->get();
         <div class="w-full md:w-3/5 lg:w-full">
             <div class="max-w-sm mx-auto">
                 <div class="mb-6 text-center">
-                    <a class="inline-block mb-6" href="{{ url('/') }}">
+                    <a class="inline-block mb-6" href="{{ route('web.index') }}">
                         <img class="h-16" src="{{ asset($setting->site_logo) }}" alt="{{ config('app.name') }}">
                     </a>
                     <h3 class="mb-4 text-2xl md:text-3xl font-bold">{{ __('Join our community') }}</h3>
@@ -37,8 +33,8 @@ $config = Config::where('status', 1)->get();
                     <div class="mb-6">
                         <label class="block mb-2 text-gray-800 font-medium" for="name">{{ __('Name') }}*</label>
                         <input
-                            class="appearance-none block w-full p-3 leading-5 text-gray-900 border border-gray-200 rounded-lg shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-{{ $config[3]->config_value }}-500 focus:ring-opacity-50 @error('name') is-invalid @enderror"
-                            type="name" id="name" placeholder="{{ __('Patryk') }}" name="name" value="{{ old('name') }}"
+                            class="appearance-none block w-full p-3 leading-5 text-gray-900 border border-gray-200 rounded-lg shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-{{ $config[11]->config_value }}-500 focus:ring-opacity-50 @error('name') is-invalid @enderror"
+                            type="name" id="name" placeholder="{{ __('MD ARIFUL HAQUE') }}" name="name" value="{{ old('name') }}"
                             required autocomplete="name" autofocus>
 
                         @error('name')
@@ -52,7 +48,7 @@ $config = Config::where('status', 1)->get();
                     <div class="mb-6">
                         <label class="block mb-2 text-gray-800 font-medium" for="email">{{ __('Email') }}*</label>
                         <input
-                            class="appearance-none block w-full p-3 leading-5 text-gray-900 border border-gray-200 rounded-lg shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-{{ $config[3]->config_value }}-500 focus:ring-opacity-50 @error('email') is-invalid @enderror"
+                            class="appearance-none block w-full p-3 leading-5 text-gray-900 border border-gray-200 rounded-lg shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-{{ $config[11]->config_value }}-500 focus:ring-opacity-50 @error('email') is-invalid @enderror"
                             type="email" id="email" name="email" value="{{ old('email') }}" required
                             autocomplete="email" placeholder="{{ __('dev@domain.com') }}">
 
@@ -67,7 +63,7 @@ $config = Config::where('status', 1)->get();
                     <div class="mb-1">
                         <label class="block mb-2 text-gray-800 font-medium" for="password">{{ __('Password') }}*</label>
                         <input
-                            class="appearance-none block w-full p-3 leading-5 text-gray-900 border border-gray-200 rounded-lg shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-{{ $config[3]->config_value }}-500 focus:ring-opacity-50 @error('password') is-invalid @enderror"
+                            class="appearance-none block w-full p-3 leading-5 text-gray-900 border border-gray-200 rounded-lg shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-{{ $config[11]->config_value }}-500 focus:ring-opacity-50 @error('password') is-invalid @enderror"
                             type="password" name="password" id="password" required autocomplete="new-password"
                             placeholder="{{ __('************') }}">
 
@@ -86,7 +82,7 @@ $config = Config::where('status', 1)->get();
                     <div class="mb-1">
                         <label class="block mb-2 text-gray-800 font-medium" for="password-confirm">{{ __('Confirm Password') }}*</label>
                         <input
-                            class="appearance-none block w-full p-3 leading-5 text-gray-900 border border-gray-200 rounded-lg shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-{{ $config[3]->config_value }}-500 focus:ring-opacity-50 @error('password') is-invalid @enderror"
+                            class="appearance-none block w-full p-3 leading-5 text-gray-900 border border-gray-200 rounded-lg shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-{{ $config[11]->config_value }}-500 focus:ring-opacity-50 @error('password') is-invalid @enderror"
                             type="password" name="password_confirmation" id="password-confirm" required
                             autocomplete="new-password" placeholder="{{ __('************') }}">
                     </div>
@@ -104,12 +100,12 @@ $config = Config::where('status', 1)->get();
                     @endif
 
                     <button type="submit"
-                        class="inline-block py-3 px-7 mb-6 lg:mb-0 lg:mr-3 w-full lg:full py-2 px-6 leading-loose bg-{{ $config[3]->config_value }}-500 hover:bg-{{ $config[3]->config_value }}-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200 text-center">{{
+                        class="inline-block py-3 px-7 mb-6 lg:mb-0 lg:mr-3 w-full lg:full py-2 px-6 leading-loose bg-{{ $config[11]->config_value }}-500 hover:bg-{{ $config[11]->config_value }}-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200 text-center">{{
                         __('Sign Up') }}</button>
 
                     <p class="text-center">
                         <span class="text-xs font-medium">{{ __('Already have an account?') }}</span>
-                        <a class="inline-block text-xs font-medium text-{{ $config[3]->config_value }}-500 hover:text-{{ $config[3]->config_value }}-600 hover:underline"
+                        <a class="inline-block text-xs font-medium text-{{ $config[11]->config_value }}-500 hover:text-{{ $config[11]->config_value }}-600 hover:underline"
                             href="{{ route('login') }}">{{ __('Sign In') }}</a>
                     </p>
                 </form>
@@ -142,9 +138,4 @@ $config = Config::where('status', 1)->get();
     }
 </script>
 @endsection
-@else
-<script type="text/javascript">
-    window.location = "{{ route('login') }}";//here double curly bracket
-</script>
-@endif
 @endsection

@@ -6,15 +6,10 @@ use Exception;
 use App\Models\User;
 use App\Models\Config;
 use App\Models\Setting;
-use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Artesaos\SEOTools\Facades\JsonLd;
-use Artesaos\SEOTools\Facades\SEOMeta;
 use App\Providers\RouteServiceProvider;
-use Artesaos\SEOTools\Facades\SEOTools;
-use Artesaos\SEOTools\Facades\OpenGraph;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -77,7 +72,7 @@ class RegisterController extends Controller
     // Redirect to dashboard
     protected function redirectTo()
     {
-        return '/admin/dashboard';
+        return '/user/dashboard';
     }
 
 
@@ -96,24 +91,6 @@ class RegisterController extends Controller
         ]; 
 
         $settings['recaptcha_configuration'] = $recaptcha_configuration;
-
-         // Seo Tools
-         SEOTools::setTitle("Register - ".$settings->site_name);
-         SEOTools::setDescription($settings->seo_meta_description);
- 
-         SEOMeta::setTitle("Register - ".$settings->site_name);
-         SEOMeta::setDescription($settings->seo_meta_description);
-         SEOMeta::addMeta('article:section', ucfirst("Register - ".$settings->site_name) . ' - ' . $settings->seo_meta_description, 'property');
-         SEOMeta::addKeyword([$settings->meta_keywords]);
- 
-         OpenGraph::setTitle("Register - ".$settings->site_name);
-         OpenGraph::setDescription($settings->seo_meta_description);
-         OpenGraph::setUrl(URL::full());
-         OpenGraph::addImage([asset($settings->site_logo), 'size' => 300]);
- 
-         JsonLd::setTitle("Register - ".$settings->site_name);
-         JsonLd::setDescription($settings->seo_meta_description);
-         JsonLd::addImage(asset($settings->site_logo));
 
         return view('auth.register', compact('config', 'settings'));
     }

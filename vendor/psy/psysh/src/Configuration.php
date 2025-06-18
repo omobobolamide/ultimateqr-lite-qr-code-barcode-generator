@@ -67,7 +67,6 @@ class Configuration
         'requireSemicolons',
         'runtimeDir',
         'startupMessage',
-        'strictTypes',
         'theme',
         'updateCheck',
         'useBracketedPaste',
@@ -100,7 +99,6 @@ class Configuration
     private $pipedOutput;
     private $rawOutput = false;
     private $requireSemicolons = false;
-    private $strictTypes = false;
     private $useUnicode;
     private $useTabCompletion;
     private $newMatchers = [];
@@ -149,8 +147,6 @@ class Configuration
             $this->configFile = $config['configFile'];
         } elseif (isset($_SERVER['PSYSH_CONFIG']) && $_SERVER['PSYSH_CONFIG']) {
             $this->configFile = $_SERVER['PSYSH_CONFIG'];
-        } elseif (\PHP_SAPI === 'cli-server' && ($configFile = \getenv('PSYSH_CONFIG'))) {
-            $this->configFile = $configFile;
         }
 
         // legacy baseDir option
@@ -965,22 +961,6 @@ class Configuration
     }
 
     /**
-     * Enable or disable strict types enforcement.
-     */
-    public function setStrictTypes($strictTypes)
-    {
-        $this->strictTypes = (bool) $strictTypes;
-    }
-
-    /**
-     * Check whether to enforce strict types.
-     */
-    public function strictTypes(): bool
-    {
-        return $this->strictTypes;
-    }
-
-    /**
      * Enable or disable Unicode in PsySH specific output.
      *
      * Note that this does not disable Unicode output in general, it just makes
@@ -1056,7 +1036,7 @@ class Configuration
     public function getCodeCleaner(): CodeCleaner
     {
         if (!isset($this->cleaner)) {
-            $this->cleaner = new CodeCleaner(null, null, null, $this->yolo(), $this->strictTypes());
+            $this->cleaner = new CodeCleaner(null, null, null, $this->yolo());
         }
 
         return $this->cleaner;

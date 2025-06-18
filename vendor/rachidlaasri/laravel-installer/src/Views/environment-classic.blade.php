@@ -12,25 +12,22 @@
 
     <form method="post" action="{{ route('LaravelInstaller::environmentSaveClassic') }}">
         {!! csrf_field() !!}
-        <textarea class="textarea" name="envConfig">{{ $envConfig }}</textarea>
-        <div class="buttons buttons--right">
-            <button class="button button--light" type="submit">
-            	<i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i>
-             	{!! trans('installer_messages.environment.classic.save') !!}
+
+        <textarea class="form-control" rows="10" name="envConfig" data-bs-toggle="autosize"
+            placeholder=".env">{{ $envConfig }}</textarea>
+
+
+        <div class="float-right mt-2 mb-2">
+            <button class="btn btn-primary" type="submit">
+                {!! trans('installer_messages.environment.classic.save') !!}
             </button>
         </div>
     </form>
 
-    @if( ! isset($environment['errors']))
-        <div class="buttons-container">
-            <a class="button float-left" href="{{ route('LaravelInstaller::environmentWizard') }}">
-                <i class="fa fa-sliders fa-fw" aria-hidden="true"></i>
-                {!! trans('installer_messages.environment.classic.back') !!}
-            </a>
-            <a class="button float-right" href="{{ route('LaravelInstaller::database') }}">
-                <i class="fa fa-check fa-fw" aria-hidden="true"></i>
+    @if (!isset($environment['errors']))
+        <div class="mt-1">
+            <a class="float-right btn btn-primary" href="{{ route('LaravelInstaller::database') }}">
                 {!! trans('installer_messages.environment.classic.install') !!}
-                <i class="fa fa-angle-double-right fa-fw" aria-hidden="true"></i>
             </a>
         </div>
     @endif
